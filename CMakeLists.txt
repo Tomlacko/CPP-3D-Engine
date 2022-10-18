@@ -71,7 +71,7 @@ add_library(framework
 	"${FRAMEWORK_SRC_DIR}/framebuffer.cpp"
 	"${FRAMEWORK_INCLUDE_DIR}/texture.hpp"
 	"${FRAMEWORK_SRC_DIR}/texture.cpp"
-)
+        framework/src/texture_group.cpp)
 add_dependencies(framework glfw glad)
 target_link_libraries(framework 
 	${GLFW_LIBRARIES}
@@ -90,7 +90,7 @@ add_executable(final
 	src/main.cpp
 	src/application.cpp
 		src/Game/camera.hpp src/Game/camera.cpp src/Game/game.hpp src/Game/game.cpp src/Game/player.hpp src/Game/player.cpp src/Game/object.hpp src/Game/object.cpp src/Game/entity.hpp src/Game/entity.cpp src/Game/map.hpp src/Game/map.cpp src/Game/area.hpp src/Game/area.cpp src/Game/light.hpp src/Game/light.cpp
-	)
+        framework/include/texture_group.hpp framework/include/debug.hpp src/Game/ui.hpp src/Game/ui.cpp)
 
 add_dependencies(final 
 	glfw 
@@ -118,19 +118,21 @@ target_include_directories(final
 
 set(SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
 set(SHADERS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/shaders)
-configure_file(${SHADERS}/draw_lights.vert ${SHADERS_BINARY}/draw_lights.vert COPYONLY)
-configure_file(${SHADERS}/draw_lights.frag ${SHADERS_BINARY}/draw_lights.frag COPYONLY)
-configure_file(${SHADERS}/draw_object.vert ${SHADERS_BINARY}/draw_object.vert COPYONLY)
-configure_file(${SHADERS}/draw_object.frag ${SHADERS_BINARY}/draw_object.frag COPYONLY)
+#configure_file(${SHADERS}/draw_lights.vert ${SHADERS_BINARY}/draw_lights.vert COPYONLY)
+#configure_file(${SHADERS}/draw_lights.frag ${SHADERS_BINARY}/draw_lights.frag COPYONLY)
+#configure_file(${SHADERS}/draw_object.vert ${SHADERS_BINARY}/draw_object.vert COPYONLY)
+#configure_file(${SHADERS}/draw_object.frag ${SHADERS_BINARY}/draw_object.frag COPYONLY)
 configure_file(${SHADERS}/draw_object_textured.vert ${SHADERS_BINARY}/draw_object_textured.vert COPYONLY)
 configure_file(${SHADERS}/draw_object_textured.frag ${SHADERS_BINARY}/draw_object_textured.frag COPYONLY)
 configure_file(${SHADERS}/postprocess.vert ${SHADERS_BINARY}/postprocess.vert COPYONLY)
 configure_file(${SHADERS}/postprocess.frag ${SHADERS_BINARY}/postprocess.frag COPYONLY)
+configure_file(${SHADERS}/ui.vert ${SHADERS_BINARY}/ui.vert COPYONLY)
+configure_file(${SHADERS}/ui.frag ${SHADERS_BINARY}/ui.frag COPYONLY)
 
-set(IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/images)
-set(IMAGES_BINARY ${CMAKE_CURRENT_BINARY_DIR}/images)
-configure_file(${IMAGES}/default.png ${IMAGES_BINARY}/default.png COPYONLY)
-configure_file(${IMAGES}/font.png ${IMAGES_BINARY}/font.png COPYONLY)
+set(TEXTURES ${CMAKE_CURRENT_SOURCE_DIR}/textures)
+set(TEXTURES_BINARY ${CMAKE_CURRENT_BINARY_DIR}/textures)
+configure_file(${TEXTURES}/default.png ${TEXTURES_BINARY}/default.png COPYONLY)
+configure_file(${TEXTURES}/font.png ${TEXTURES_BINARY}/font.png COPYONLY)
 
 set(OBJECTS ${CMAKE_CURRENT_SOURCE_DIR}/objects)
 set(OBJECTS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/objects)

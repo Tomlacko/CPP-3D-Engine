@@ -2,10 +2,11 @@
 #include "../application.hpp"
 #include <GLFW/glfw3.h>
 
+static constexpr char const* INITIAL_MAP = "map01.map";
 
 
-Game::Game(Application* application, int w, int h, const std::string& mapName)
-:app(application), width(w), height(h), map(mapName), player(map.getPlayerSpawnPoint(), map.getPlayerSpawnRot()), camera(w, h), prerenderingFramebuffer(w, h) {
+Game::Game(Application* application, int w, int h)
+:app(application), width(w), height(h), map(INITIAL_MAP), player(map.getPlayerSpawnPoint(), map.getPlayerSpawnRot()), camera(w, h), prerenderingFramebuffer(w, h) {
     glEnable(GL_CULL_FACE);
 }
 
@@ -21,7 +22,7 @@ void Game::tick(float deltaTime) {
         if(keyHeld(GLFW_KEY_A)) moveDir.x-=1;
         if(keyHeld(GLFW_KEY_D)) moveDir.x+=1;
         if(keyHeld(GLFW_KEY_SPACE)) moveDir.y+=1;
-        if(keyHeld(GLFW_KEY_LEFT_SHIFT)) moveDir.y-=1;
+        if(keyHeld(GLFW_KEY_LEFT_CONTROL)) moveDir.y-=1;
         player.move(moveDir);
     }
 
@@ -34,14 +35,11 @@ void Game::tick(float deltaTime) {
 
 void Game::render() const {
     prerenderingFramebuffer.use();
-
     glEnable(GL_DEPTH_TEST);
-
     camera.use();
-
     progDrawTextured.use();
-
     map.render(currentTime);
+
 
     progPostprocess.use();
 
@@ -51,9 +49,14 @@ void Game::render() const {
     //depth test not needed for direct drawing
     glDisable(GL_DEPTH_TEST);
 
-    //program
+    //font_texture.use(2);
 
     Framebuffer::drawScreenCoveringTriangle();
+
+    /*
+    progUI.use();
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    */
 }
 
 void Game::setGuiMode(bool enable) {
@@ -77,6 +80,8 @@ void Game::mouseClick(float x, float y, int button, bool down) {
 void Game::mouseScroll(float amount) {
     //+amount == up/forward
     //-amount == down/backward
+    //map.objects.at("mansion_wall").changeRotBy(glm::radians(22.5*amount), 0);
+    player.flyMode(amount>0);
 }
 
 void Game::handleKey(int key, bool down) {
@@ -88,6 +93,9 @@ void Game::handleKey(int key, bool down) {
             case 256: //ESC
                 stopGame = true;
                 break;
+            case 340:
+                player.setRunning(true);
+                break;
         }
     }
     else {
@@ -95,7 +103,9 @@ void Game::handleKey(int key, bool down) {
         //DEBUG_LOG_LN(key);
 
         switch(key) {
-
+            case 340:
+                player.setRunning(false);
+                break;
         }
     }
 }

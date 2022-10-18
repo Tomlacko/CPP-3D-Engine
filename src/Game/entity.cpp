@@ -1,12 +1,18 @@
 #include "entity.hpp"
+#include <utilities.hpp>
 #include <cmath>
-
 
 
 void Entity::init() {
     Object::init();
 
 }
+
+
+glm::vec3 Entity::getLookDir() const {
+    return rotToDir(rotation);
+}
+
 
 void Entity::addImpulse(const glm::vec3& dir, float amount) {
     glm::vec3 norm = glm::normalize(dir);
@@ -16,6 +22,9 @@ void Entity::addImpulse(const glm::vec3& dir, float amount) {
 }
 void Entity::addImpulse(const glm::vec3& impulse) {
     impulses += impulse;
+}
+void Entity::addImpulse(const glm::vec2& angle, float amount) {
+    addImpulse(rotToDir(angle), amount);
 }
 
 void Entity::addForce(const glm::vec3& dir, float amount) {
@@ -27,24 +36,22 @@ void Entity::addForce(const glm::vec3& dir, float amount) {
 void Entity::addForce(const glm::vec3& force) {
     forces += force;
 }
-
-void Entity::tick(float deltaTime) {
-    if(gravity) addForce({0, -9.87, 0});
-
-    float resistance = std::pow(std::min(getResistance(), 1.0f), deltaTime);
+void Entity::addForce(const glm::vec2& angle, float amount) {
+    addForce(rotToDir(angle), amount);
+}
 
 
-    if(gravity) {
-        motion.x *= resistance;
-        motion.y *= std::pow(std::min(getResistance(), 1.0f), deltaTime/10);
-        motion.z *= resistance;
-    }
-    else motion *= resistance;
+void Entity::preTick(float deltaTime) {
+    motion += impulses/*/mass*/ + (forces/mass)*deltaTime;
+    posChange += motion*deltaTime;
+}
 
-    //motion -= motion*getResistance()*deltaTime;
-    motion += forces*deltaTime + impulses;
-    changePosBy(motion*deltaTime);
+void Entity::midTick(float deltaTime) {
 
+}
+
+void Entity::postTick(float deltaTime) {
+    changePosBy(posChange);
     if(position.y<=0) {
         position.y = 0; //pos was already changed so it knows it was modified
         motion.y = 0;
@@ -54,8 +61,16 @@ void Entity::tick(float deltaTime) {
         onGround = false;
     }
 
-
-
+    forces = {0,(gravity ? -9.8*mass : 0),0};
     impulses = {0,0,0};
-    forces = {0,0,0};
+    posChange = {0,0,0};
+
+    motion /= std::pow(2, deltaTime*(airResistance+(onGround?friction:0)));
+    //addForce(-motion*glm::abs(motion)*(airResistance));
+}
+
+void Entity::tick(float deltaTime) {
+    preTick(deltaTime);
+    midTick(deltaTime);
+    postTick(deltaTime);
 }

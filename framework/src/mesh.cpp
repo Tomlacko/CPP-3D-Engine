@@ -4,6 +4,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
+#include "plane.inl"
 #include "cube.inl"
 #include "sphere.inl"
 #include "teapot.inl"
@@ -41,11 +42,8 @@ Mesh::Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<
     recreate_vao(position_location, normal_location, tex_coord_location);
 }
 
-Mesh::Mesh(const Mesh& other) {
-    vertices_count = other.vertices_count;
-    indices_count = other.indices_count;
-    mode = other.mode;
-
+Mesh::Mesh(const Mesh& other)
+:vertices_count(other.vertices_count), indices_count(other.indices_count), mode(other.mode), rightHanded(other.rightHanded) {
     // Copy vertices
     if(other.vertices_buffer != 0) {
         glCreateBuffers(1, &vertices_buffer);
@@ -80,7 +78,7 @@ Mesh::Mesh(const Mesh& other) {
     recreate_vao(other.position_location, other.normal_location, other.tex_coord_location);
 }
 
-void Mesh::recreate_vao(GLint position_location, GLint normal_location, GLint tex_coord_location) {
+void Mesh::recreate_vao(GLint position_location /* = 0*/, GLint normal_location /* = 1*/, GLint tex_coord_location /* = 2*/) {
     // In case it was created before
     glDeleteVertexArrays(1, &vao);
 
@@ -135,7 +133,8 @@ Mesh::~Mesh() {
 }
 
 
-void Mesh::draw() const {
+void Mesh::draw(int handednessLocation /* = 1*/) const {
+    glUniform1i(handednessLocation, rightHanded?-1:1); //handedness
     glBindVertexArray(vao);
 
     if(indices_buffer > 0)
@@ -145,41 +144,19 @@ void Mesh::draw() const {
 }
 
 
-Mesh Mesh::from_interleaved(std::vector<float> interleaved_vertices, std::vector<uint32_t> indices, GLenum mode, GLint position_location, GLint normal_location, GLint tex_coord_location) {
-    // Deinterleave and then call deinterleaved constructor
-    std::vector<float> vertices;
-    std::vector<float> normals;
-    std::vector<float> tex_coords;
 
-    for(size_t vertex_offset = 0; vertex_offset < interleaved_vertices.size(); vertex_offset += 8) {
-        for(int i=0; i<3; i++) {
-            vertices.push_back(interleaved_vertices[vertex_offset+i]);
-            normals.push_back(interleaved_vertices[vertex_offset+i+3]);
-        }
-
-        tex_coords.push_back(interleaved_vertices[vertex_offset+6]);
-        tex_coords.push_back(interleaved_vertices[vertex_offset+7]);
-    }
-
-    Mesh mesh(std::move(vertices), std::move(normals), std::move(tex_coords), std::move(indices), mode);
-    mesh.recreate_vao(position_location, normal_location, tex_coord_location);
-
-    return mesh;
-}
-
-
-
-std::vector<std::unique_ptr<Mesh>> Mesh::from_file(const std::string& file_name, GLint position_location, GLint normal_location, GLint tex_coord_location) {
+std::unique_ptr<Meshes> Mesh::from_file(const std::string& file_name, bool rightHanded /* = true*/, GLint position_location /* = 0*/, GLint normal_location /* = 1*/, GLint tex_coord_location /* = 2*/) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &err, file_name.c_str(), "objects")) {
+    if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &err, file_name.c_str())) {
         throw "Could not load object file.";
     }
 
-    std::vector<std::unique_ptr<Mesh>> meshes;
+    std::unique_ptr<Meshes> meshes_ptr = std::make_unique<Meshes>(); //vector
+    std::vector<std::unique_ptr<Mesh>>& meshes = *meshes_ptr;
 
     // Loop over shapes
     for(auto& shape : shapes) {
@@ -212,17 +189,45 @@ std::vector<std::unique_ptr<Mesh>> Mesh::from_file(const std::string& file_name,
 
         meshes.push_back(std::make_unique<Mesh>(vertices, normals, tex_coords, std::vector<uint32_t>()));
         meshes[meshes.size()-1]->recreate_vao(position_location, normal_location, tex_coord_location);
+        meshes[meshes.size()-1]->rightHanded = rightHanded;
     }
 
-    return meshes;
+    return meshes_ptr;
 }
 
 
 
-Mesh Mesh::cube(GLint position_location, GLint normal_location, GLint tex_coord_location) {
+std::unique_ptr<Meshes> Mesh::from_interleaved(std::vector<float> interleaved_vertices, std::vector<uint32_t> indices, bool rightHanded /* = true*/, GLenum mode /* = GL_TRIANGLES*/, GLint position_location /* = 0*/, GLint normal_location /* = 1*/, GLint tex_coord_location /* = 2*/) {
+    // Deinterleave and then call deinterleaved constructor
+    std::vector<float> vertices;
+    std::vector<float> normals;
+    std::vector<float> tex_coords;
+
+    for(size_t vertex_offset = 0; vertex_offset < interleaved_vertices.size(); vertex_offset += 8) {
+        for(int i=0; i<3; i++) {
+            vertices.push_back(interleaved_vertices[vertex_offset+i]);
+            normals.push_back(interleaved_vertices[vertex_offset+i+3]);
+        }
+
+        tex_coords.push_back(interleaved_vertices[vertex_offset+6]);
+        tex_coords.push_back(interleaved_vertices[vertex_offset+7]);
+    }
+
+    std::unique_ptr<Meshes> meshes_ptr = std::make_unique<Meshes>(); //vector
+    std::vector<std::unique_ptr<Mesh>>& meshes = *meshes_ptr;
+
+    meshes.emplace_back(std::make_unique<Mesh>(std::move(vertices), std::move(normals), std::move(tex_coords), std::move(indices), mode));
+    meshes[0]->recreate_vao(position_location, normal_location, tex_coord_location);
+    meshes[0]->rightHanded = rightHanded;
+    return meshes_ptr;
+}
+
+
+std::unique_ptr<Meshes> Mesh::plane(GLint position_location, GLint normal_location, GLint tex_coord_location) {
     return Mesh::from_interleaved(
-            std::vector<float>(cube_vertices, std::end(cube_vertices)),
-            std::vector<uint32_t>(cube_indices, std::end(cube_indices)),
+            std::vector<float>(plane_vertices, std::end(plane_vertices)),
+            std::vector<uint32_t>(plane_indices, std::end(plane_indices)),
+            false,
             GL_TRIANGLES,
             position_location,
             normal_location,
@@ -230,10 +235,23 @@ Mesh Mesh::cube(GLint position_location, GLint normal_location, GLint tex_coord_
     );
 }
 
-Mesh Mesh::sphere(GLint position_location, GLint normal_location, GLint tex_coord_location) {
+std::unique_ptr<Meshes> Mesh::cube(GLint position_location, GLint normal_location, GLint tex_coord_location) {
+    return Mesh::from_interleaved(
+            std::vector<float>(cube_vertices, std::end(cube_vertices)),
+            std::vector<uint32_t>(cube_indices, std::end(cube_indices)),
+            true,
+            GL_TRIANGLES,
+            position_location,
+            normal_location,
+            tex_coord_location
+    );
+}
+
+std::unique_ptr<Meshes> Mesh::sphere(GLint position_location, GLint normal_location, GLint tex_coord_location) {
     return Mesh::from_interleaved(
             std::vector<float>(sphere_vertices, std::end(sphere_vertices)),
             std::vector<uint32_t>(sphere_indices, std::end(sphere_indices)),
+            true,
             GL_TRIANGLE_STRIP,
             position_location,
             normal_location,
@@ -241,10 +259,11 @@ Mesh Mesh::sphere(GLint position_location, GLint normal_location, GLint tex_coor
     );
 }
 
-Mesh Mesh::teapot(GLint position_location, GLint normal_location, GLint tex_coord_location) {
+std::unique_ptr<Meshes> Mesh::teapot(GLint position_location, GLint normal_location, GLint tex_coord_location) {
     return Mesh::from_interleaved(
             std::vector<float>(teapot_vertices, std::end(teapot_vertices)),
             std::vector<uint32_t>(teapot_indices, std::end(teapot_indices)),
+            true,
             GL_TRIANGLE_STRIP,
             position_location,
             normal_location,

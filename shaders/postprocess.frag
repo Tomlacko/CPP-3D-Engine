@@ -35,9 +35,11 @@ layout(location = 0) out vec4 final_color;
 
 
 
+//ivec2 fontTexSize = textureSize(font_texture).xy;
+
 void main() {
 	//  Uncomment and comment the kernel application below to make the post-process only pass through the given color
-    vec3 color = texelFetch(input_image, ivec2(gl_FragCoord.xy), 0).rgb;
+    //vec3 color = texelFetch(input_image, ivec2(gl_FragCoord.xy), 0).rgb;
 
 	//gaussian blur
 	//vec3 color = vec3(0.0);
@@ -52,6 +54,8 @@ void main() {
 	//https://en.wikipedia.org/wiki/Tone_mapping
 	//http://filmicworlds.com/blog/filmic-tonemapping-operators/
 	//final_color = vec4(color / (color + 1.0), 1.0);
+
+	//vec4 font_pixel = texelFetch(input_image, ivec2(gl_FragCoord.xy%fontTexSize), 0);
 
 	//direct read
 	final_color = texelFetch(input_image, ivec2(gl_FragCoord.xy), 0);

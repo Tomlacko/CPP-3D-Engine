@@ -8,6 +8,18 @@
 #include <glad/glad.h>
 
 
+/*
+struct MeshAttribs {
+    std::vector<float> vertices;
+    std::vector<float> normals;
+    std::vector<float> tex_coords;
+    std::vector<uint32_t> indices;
+};*/
+
+
+class Mesh;
+typedef std::vector<std::unique_ptr<Mesh>> Meshes;
+
 
 class Mesh {
 
@@ -34,6 +46,9 @@ class Mesh {
 
 
 public:
+
+    bool rightHanded = true;
+
 
     Mesh(std::vector<float> vertices, std::vector<uint32_t> indices, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2)
     :Mesh(std::move(vertices), std::vector<float>(), std::vector<float>(), std::move(indices), mode, position_location, normal_location, tex_coord_location) {
@@ -64,14 +79,16 @@ public:
     [[nodiscard]] GLuint get_tex_coords_buffer() const {return this->tex_coords_buffer;}
     [[nodiscard]] GLuint get_indices_buffer() const {return this->indices_buffer;}
 
-    void draw() const;
+
+    void draw(int handednessLocation = 1) const;
 
 
-    static Mesh from_interleaved(std::vector<float> interleaved_vertices, std::vector<uint32_t> indices, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> from_file(const std::string &file_name, bool rightHanded = true, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
 
-    static std::vector<std::unique_ptr<Mesh>> from_file(const std::string &file_name, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> from_interleaved(std::vector<float> interleaved_vertices, std::vector<uint32_t> indices, bool rightHanded = true, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
 
-    static Mesh cube(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
-    static Mesh sphere(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
-    static Mesh teapot(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> plane(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> cube(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> sphere(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    static std::unique_ptr<Meshes> teapot(GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
 };

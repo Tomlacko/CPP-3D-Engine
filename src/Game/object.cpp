@@ -114,13 +114,12 @@ void Object::render(float time) const {
     //bind UBO buffer (2 = binding within shader)
     glBindBufferBase(GL_UNIFORM_BUFFER, 2, bufferID);
 
-    if(texture) texture->use(0);
+    if(textures) textures->use();
+    else glUniform1ui(0, 0u); //bind mask 0
 
-    glUniform1i(1, rightHanded?-1:1);
-
-    //temporary
-    cube.draw();
-    for(const auto& mesh : geometry) {
-        mesh->draw();
+    if(geometry) {
+        for(const auto& mesh : *geometry) {
+            mesh->draw();
+        }
     }
 }

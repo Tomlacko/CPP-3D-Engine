@@ -1,19 +1,24 @@
 #include "player.hpp"
-#include <glm/gtx/vector_angle.hpp>
-#include <cmath>
 #include <utilities.hpp>
+#include <cmath>
+#include <glm/gtx/vector_angle.hpp>
+
+#include <debug.hpp>
+
 
 
 
 void Player::init() {
     Entity::init();
 
+    mass = 80;
+
     //flyMode(true);
 }
 
 
 void Player::changeRotBy(float x, float y) {
-    rotation.x = std::fmod(rotation.x + x, PI2);
+    rotation.x = mod(rotation.x + x, PI2);
     rotation.y = clamp(minAngleV, rotation.y + y, maxAngleV);
 }
 
@@ -47,28 +52,35 @@ void Player::move(const glm::vec3& dir) {
         moveV = false;
 
     if(flying) {
-        if(moveH) addForce({
+        if(moveH) movementControls += glm::vec3( //flying towards cursor
             std::sin(rotation.x+moveAngle)*std::cos(rotation.y),
             std::sin(rotation.y)*std::cos(moveAngle),
             std::cos(rotation.x+moveAngle)*std::cos(rotation.y)
-        }, speed);
-        if(moveV) addForce({0, dir.y, 0}, speed); //flying up and down
+        );
+        if(moveV) movementControls.y += dir.y; //flying up and down
     }
     else {
-        if(moveH) addForce({
+        if(moveH) movementControls += glm::vec3( //horizontal walking
             std::sin(rotation.x+moveAngle),
             0,
             std::cos(rotation.x+moveAngle)
-        }, speed);
+        );
         if(onGround && dir.y==1) addImpulse({0,1,0}, jumpStrength); //jumping
     }
+    if(glm::length(movementControls)>1) movementControls = glm::normalize(movementControls);
+
+    //TODO fix A D flying movement
 }
 
 void Player::flyMode(bool activate) {
+    onGround = false;
     if(activate) {
         gravity = false;
         flying = true;
-        onGround = false;
+
+        motion = {0,0,0};
+        forces = {0,0,0};
+        impulses = {0,0,0};
     }
     else { //walking
         gravity = true;
@@ -76,7 +88,33 @@ void Player::flyMode(bool activate) {
     }
 }
 
-void Player::tick(float deltaTime) {
-    Entity::tick(deltaTime);
+void Player::preTick(float deltaTime) {
+    Entity::preTick(deltaTime);
+    posChange += movementControls*(running?runSpeed:speed)*deltaTime;
+}
 
+void Player::midTick(float deltaTime) {
+    Entity::midTick(deltaTime);
+}
+
+void Player::postTick(float deltaTime) {
+    movementControls /= std::pow(2, deltaTime*(movementSlowdown/(onGround?1:4)));
+
+    if(glm::length(movementControls) < 0.05) movementControls = {0,0,0};
+
+    Entity::postTick(deltaTime);
+}
+
+void Player::tick(float deltaTime) {
+    preTick(deltaTime);
+    midTick(deltaTime);
+    postTick(deltaTime);
+    DEBUG_LOG("Position: ");
+    DEBUG_LOG_SEP(position.x);
+    DEBUG_LOG_SEP(position.y);
+    DEBUG_LOG_SEP(position.z);
+    DEBUG_LOG("Motion: ");
+    DEBUG_LOG_SEP(motion.x);
+    DEBUG_LOG_SEP(motion.y);
+    DEBUG_LOG_LN(motion.z);
 }

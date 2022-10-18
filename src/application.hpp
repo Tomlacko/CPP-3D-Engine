@@ -84,12 +84,12 @@ private:
 /*    ObjectUBO default_object;
     GLuint default_object_buffer = 0;
 
-    Texture default_texture {"images/default.png", false};
+    Texture default_texture {"textures/default.png", false};
 
     ObjectUBO floor_object;
     GLuint floor_object_buffer = 0;
 */
-    //Texture font_texture {"images/font.png", false};
+    //Texture font_texture {"textures/font.png", false};
 
     // ----------------------------------------------------------------------------
     // LIGHTS

@@ -28,11 +28,16 @@ layout(binding = 2, std140) uniform Object {
 } object;
 
 
-layout(location = 0) uniform float time;
+//0001b = diffuse, 0010b = normal, 0100b = height, 1000b = specular
+//layout(location = 0) uniform uint textureFlags;
 layout(location = 1) uniform int handedness; //1 = lefthanded, -1 = righthanded
 //To convert a model from a right handed coordinate system to left handed:
 //Invert the z-axis by multiplying it with -1.0f (vertex position, normal, etc.)
 //Invert the v axis of texture coordinates by subtracting it from one (eg. texcoord.v = 1 - texcoord.v)
+
+layout(location = 2) uniform float time;
+
+
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
@@ -42,15 +47,20 @@ layout(location = 0) out vec3 fs_position;
 layout(location = 1) out vec3 fs_normal;
 layout(location = 2) out vec2 fs_texture_coordinate;
 
+
+
+
 float rand(float k){
 	return fract(sin((k+12.9898)*78.233)) * 43758.5453;
 }
+
+
 
 void main()
 {
 	vec4 transformedPos = object.model_matrix * vec4(
 		position.x,
-		position.y+sin(time*PI + rand(position.x+position.y+position.z))*0.1,
+		position.y,//+sin(time*PI + rand(position.x+(position.y*position.z)))*0.1,
 		position.z*handedness,
 	1.0);
 

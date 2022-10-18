@@ -27,18 +27,18 @@ class Game {
     Map map;
     Player player;
     Camera camera;
-    Framebuffer prerenderingFramebuffer;
 
     GLProgram progDrawTextured {"shaders/draw_object_textured.vert", "shaders/draw_object_textured.frag"};
-    //GLProgram progDrawColored {"shaders/draw_object.vert", "shaders/draw_object.frag"};
-    //GLProgram progLightPosVisualization {"shaders/draw_lights.vert", "shaders/draw_lights.frag"};
     GLProgram progPostprocess {"shaders/postprocess.vert", "shaders/postprocess.frag"};
+    GLProgram progUI {"shaders/ui.vert", "shaders/ui.frag"};
 
-    Texture font {"images/font.png", false};
+    Texture font_texture {"textures/font.png", false};
+
+    Framebuffer prerenderingFramebuffer;
 
 public:
 
-    Game(Application* application, int w, int h, const std::string& mapName);
+    Game(Application* application, int w, int h);
 
     ~Game() = default;
 

@@ -3,7 +3,7 @@
 
 
 //default/clear colors (undrawn background)
-const float default_color[4] = {0.0, 0.0, 0.0, 1.0};
+const float default_color[4] = {0.698, 0.867, 1.0, 1.0};
 const float default_depth[1] = {1.0};
 
 

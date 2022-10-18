@@ -5,6 +5,7 @@
 #include <memory>
 
 
+
 class Texture {
     int width;
     int height;
@@ -22,18 +23,20 @@ public:
 
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
+    Texture(Texture&&) = default;
+    Texture& operator=(Texture&&) = default;
 
     ~Texture();
 
 
     void load(bool delData = true);
 
-    bool isLoaded() const {return loadedInGL;}
-    bool isInterpolated() const {return interpolated;}
+    [[nodiscard]] bool isLoaded() const {return loadedInGL;}
+    [[nodiscard]] bool isInterpolated() const {return interpolated;}
 
-    int getWidth() const {return width;}
-    int getheight() const {return height;}
-    int getChannels() const {return channels;}
+    [[nodiscard]] int getWidth() const {return width;}
+    [[nodiscard]] int getheight() const {return height;}
+    [[nodiscard]] int getChannels() const {return channels;}
 
     /*GLuint getID() const;
     const GLuint* getIDptr() const;*/

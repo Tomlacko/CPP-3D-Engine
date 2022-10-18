@@ -7,9 +7,7 @@
 #include <utility>
 
 #include <mesh.hpp>
-
-//#include <texture.hpp>
-class Texture;
+#include <texture_group.hpp>
 
 
 /*
@@ -33,42 +31,38 @@ struct ObjectUBO {
 
 class Object {
 
-
 protected:
     glm::vec3 position;
     glm::vec2 rotation;
     glm::vec3 size;
     glm::vec3 scale {1, 1, 1};
     bool centeredOnBottom = true;
-    bool rightHanded = true;
-
-    std::vector<std::unique_ptr<Mesh>> geometry;
 
     mutable bool modelMatrixOutdated = true;
     mutable bool uboOutdated = true;
     mutable ObjectUBO ubo;
     GLuint bufferID = 0;
 
-    Texture* texture = nullptr;
+    Meshes* geometry = nullptr;
+    TextureGroup* textures = nullptr;
+
 
     void init();
 
     void updateModelMatrix() const;
-
-    Mesh cube = Mesh::cube();
 
 public:
     Object() {
         init();
     }
 
-    Object(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc, Texture& tex, bool rHanded = true)
-    : position(pos), rotation(rot), scale(sc), rightHanded(rHanded), texture(&tex) {
+    Object(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc, Meshes* geom, TextureGroup* texGrp)
+    : position(pos), rotation(rot), scale(sc), geometry(geom), textures(texGrp) {
         init();
     }
 
-    Object(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc, bool rHanded = true)
-    : position(pos), rotation(rot), scale(sc), rightHanded(rHanded) {
+    Object(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc)
+    : position(pos), rotation(rot), scale(sc) {
         init();
     }
 
@@ -82,8 +76,8 @@ public:
 
     virtual ~Object();
 
-    void setGeometry(std::vector<std::unique_ptr<Mesh>> geom) {geometry = std::move(geom);}
-    void setTexture(Texture& tex) {texture = &tex;}
+    void setGeometry(Meshes* geom) {geometry = geom;}
+    void setTextures(TextureGroup* texGrp) {textures = texGrp;}
 
     void setSpecular(glm::vec4 spec) {ubo.specular_color = spec; uboOutdated = true;}
 

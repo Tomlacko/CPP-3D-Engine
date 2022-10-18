@@ -3,33 +3,36 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include <fstream>
-#include <sstream>
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
 #include "object.hpp"
 #include "entity.hpp"
 #include "light.hpp"
 #include "area.hpp"
-#include <texture.hpp>
 
 
 
 class Map {
     Area spawnPoint;
 
-    std::unordered_map<std::string, Texture> textures;
+    std::unordered_map<std::string, std::unique_ptr<Texture>> textures;
+    std::unordered_map<std::string, std::unique_ptr<TextureGroup>> textureGroups;
+    std::unordered_map<std::string, std::unique_ptr<Meshes>> meshes;
+
+
+    GLuint lightsBufferID = 0;
+
+
+public:
 
     std::unordered_map<std::string, Object> objects;
     std::unordered_map<std::string, Entity> entities;
 
     std::vector<LightUBO> lights;
 
-    GLuint lightsBufferID = 0;
+    std::unordered_map<std::string, std::string> definitions_string;
+    std::unordered_map<std::string, int> definitions_int;
+    std::unordered_map<std::string, float> definitions_float;
 
-
-public:
 
     Map() = default;
     explicit Map(const std::string& mapName);

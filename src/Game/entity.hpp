@@ -3,7 +3,6 @@
 
 //#include <glm/glm.hpp>
 #include "object.hpp"
-#include <utilities.hpp>
 
 
 
@@ -14,12 +13,26 @@ protected:
     glm::vec3 forces;
     glm::vec3 impulses;
 
+    glm::vec3 posChange;
+
+
+    float airResistance = 0.05;
+    float friction = 10;
+
+    float mass = 20;
+
     bool onGround = false;
     bool gravity = true;
+    bool frozen = false;
+
+
 
     void init();
 
 public:
+    Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sz, Meshes* geom, TextureGroup* texGrp): Object(pos, rot, sz, geom, texGrp) {
+        init();
+    }
     Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sz): Object(pos, rot, sz) {
         init();
     }
@@ -27,13 +40,12 @@ public:
         init();
     }
 
-    glm::vec3 getLookDir() const {
-        return rotToDir(rotation);
-    }
+    [[nodiscard]] glm::vec3 getLookDir() const;
 
-    virtual float getAirDrag() const {return 0.9;}
-    virtual float getFriction() const {return 0.4;}
-    float getResistance() const {return onGround ? getFriction() : getAirDrag();}
+    void freeze() {frozen = true;}
+    void unfreeze() {frozen = false;}
+    [[nodiscard]] bool isFrozen() const {return frozen;}
+
 
     void setMotion(float x, float y, float z) {
         motion = {x, y, z};
@@ -44,16 +56,14 @@ public:
 
     void addImpulse(const glm::vec3& dir, float amount);
     void addImpulse(const glm::vec3& impulse);
-    void addImpulse(const glm::vec2& angle, float amount) {
-        addImpulse(rotToDir(angle), amount);
-    }
+    void addImpulse(const glm::vec2& angle, float amount);
 
     void addForce(const glm::vec3& dir, float amount);
     void addForce(const glm::vec3& force);
-    void addForce(const glm::vec2& angle, float amount) {
-        addForce(rotToDir(angle), amount);
-    }
+    void addForce(const glm::vec2& angle, float amount);
 
-
+    virtual void preTick(float deltaTime);
+    virtual void midTick(float deltaTime);
+    virtual void postTick(float deltaTime);
     virtual void tick(float deltaTime);
 };
