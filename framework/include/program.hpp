@@ -1,8 +1,25 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <string>
 
-#include "utilities.hpp"
 
-GLuint compile_shader(const std::string &path, GLenum shader_type);
-GLuint create_program(const std::string &vertex_path, const std::string &fragment_path);
+class GLProgram {
+
+public:
+    const GLuint vertexShaderID;
+    const GLuint fragmentShaderID;
+    const GLuint programID;
+
+    GLProgram(const GLuint vertShaderID, const GLuint fragShaderID);
+    GLProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+    ~GLProgram();
+
+    GLProgram(const GLProgram&) = delete;
+    GLProgram& operator=(const GLProgram&) = delete;
+
+    void use() const {glUseProgram(programID);}
+
+
+    static GLuint createShader(const std::string& filepath, GLenum shaderType);
+};

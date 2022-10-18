@@ -13,8 +13,9 @@ struct Light {
 	vec4 specular_color;
 };
 
+//https://www.khronos.org/opengl/wiki/Interface_Block_(GLSL)
 layout(binding = 1, std430) buffer Lights {
-	Light lights[];
+	Light lights[]; //last shader_storage member, can use unspecified range
 };
 
 layout(binding = 2, std140) uniform Object {
@@ -38,6 +39,7 @@ void main()
 	for(int i = 0; i < lights.length(); i++) {
 		Light light = lights[i];
 
+		//dependant on light type
 		vec3 light_vector = light.position.xyz - fs_position * light.position.w;
 		vec3 L = normalize(light_vector);
 		vec3 N = normalize(fs_normal);
@@ -47,11 +49,18 @@ void main()
 		float NdotL = max(dot(N, L), 0.0);
 		float NdotH = max(dot(N, H), 0.0);
 
+		//w == 1 is point light, 0 is directional
 		float distance2 = light.position.w == 1.0 ? pow(length(light_vector), 2) : 1.0;
 
+		//TODO - replace with specular and bump-map texture, (ambient texture would be always glowing?)
 		vec3 ambient = object.ambient_color.rgb * light.ambient_color.rgb;
 		vec3 diffuse = texture(diffuse_texture, fs_texture_coordinate).rgb * object.diffuse_color.rgb * light.diffuse_color.rgb;
 		vec3 specular = object.specular_color.rgb * light.specular_color.rgb;
+
+		//custom, wrong coloring
+		//vec3 ambient = /*object.ambient_color.rgb * */ light.ambient_color.rgb;
+		//vec3 diffuse = texture(diffuse_texture, fs_texture_coordinate).rgb * /*object.diffuse_color.rgb * */ light.diffuse_color.rgb;
+		//vec3 specular = /*object.specular_color.rgb * */ light.specular_color.rgb;
 
 		vec3 color = ambient.rgb
 			+ NdotL * diffuse.rgb

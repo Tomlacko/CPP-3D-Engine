@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 include(ExternalProject)
 
-project(pv112)
+project(PV112_TermProject_Game)
 
 if(UNIX)
     find_package(OpenGL REQUIRED)
@@ -67,8 +67,8 @@ add_library(framework
 	"${FRAMEWORK_SRC_DIR}/program.cpp"
 	"${FRAMEWORK_INCLUDE_DIR}/mesh.hpp"
 	"${FRAMEWORK_SRC_DIR}/mesh.cpp"
-	"${FRAMEWORK_INCLUDE_DIR}/rotate_camera.hpp"
-	"${FRAMEWORK_SRC_DIR}/rotate_camera.cpp"
+	"${FRAMEWORK_INCLUDE_DIR}/framebuffer.hpp"
+	"${FRAMEWORK_SRC_DIR}/framebuffer.cpp"
 	"${FRAMEWORK_INCLUDE_DIR}/texture.hpp"
 	"${FRAMEWORK_SRC_DIR}/texture.cpp"
 )
@@ -87,9 +87,10 @@ target_include_directories(framework
 
 # YOUR PROJECT
 add_executable(final
-	src/main.cpp 
+	src/main.cpp
 	src/application.cpp
-)
+		src/Game/camera.hpp src/Game/camera.cpp src/Game/game.hpp src/Game/game.cpp src/Game/player.hpp src/Game/player.cpp src/Game/object.hpp src/Game/object.cpp src/Game/entity.hpp src/Game/entity.cpp src/Game/map.hpp src/Game/map.cpp src/Game/area.hpp src/Game/area.cpp src/Game/light.hpp src/Game/light.cpp
+	)
 
 add_dependencies(final 
 	glfw 
@@ -113,6 +114,7 @@ target_include_directories(final
 # You can use configure_file to copy all the files needed to run the application into the build folder.
 # That way you don't have to configure the IDE to run the program from inside the source folder.
 # configure_file("${CMAKE_CURRENT_SOURCE_DIR}/FILL_IN" "${CMAKE_CURRENT_BINARY_DIR}/FILL_IN" COPYONLY)
+#
 
 set(SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
 set(SHADERS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/shaders)
@@ -128,8 +130,15 @@ configure_file(${SHADERS}/postprocess.frag ${SHADERS_BINARY}/postprocess.frag CO
 set(IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/images)
 set(IMAGES_BINARY ${CMAKE_CURRENT_BINARY_DIR}/images)
 configure_file(${IMAGES}/default.png ${IMAGES_BINARY}/default.png COPYONLY)
+configure_file(${IMAGES}/font.png ${IMAGES_BINARY}/font.png COPYONLY)
 
 set(OBJECTS ${CMAKE_CURRENT_SOURCE_DIR}/objects)
 set(OBJECTS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/objects)
 configure_file(${OBJECTS}/test_scene.mtl ${OBJECTS_BINARY}/test_scene.mtl COPYONLY)
 configure_file(${OBJECTS}/test_scene.obj ${OBJECTS_BINARY}/test_scene.obj COPYONLY)
+configure_file(${OBJECTS}/mansion_wall.obj ${OBJECTS_BINARY}/mansion_wall.obj COPYONLY)
+
+
+set(MAPS ${CMAKE_CURRENT_SOURCE_DIR}/maps)
+set(MAPS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/maps)
+configure_file(${MAPS}/map01.map ${MAPS_BINARY}/map01.map COPYONLY)

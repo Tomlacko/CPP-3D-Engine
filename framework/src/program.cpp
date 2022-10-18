@@ -1,30 +1,51 @@
 #include "program.hpp"
+#include <utilities.hpp>
 
-GLuint compile_shader(const std::string &path, GLenum shader_type) {
-  const std::string shader_source = load_file(path);
-  const char *shader_str = shader_source.data();
 
-  GLuint shader = glCreateShader(shader_type);
-  glShaderSource(shader, 1, &shader_str, nullptr);
-  glCompileShader(shader);
+GLProgram::GLProgram(const GLuint vertShaderID, const GLuint fragShaderID)
+:vertexShaderID(vertShaderID), fragmentShaderID(fragShaderID),
+ programID(glCreateProgram()) {
 
-  return shader;
+    glAttachShader(programID, vertexShaderID);
+    glAttachShader(programID, fragmentShaderID);
+
+    glLinkProgram(programID);
+
+    glDetachShader(programID, vertexShaderID);
+    glDetachShader(programID, fragmentShaderID);
 }
 
-GLuint create_program(const std::string &vertex_path, const std::string &fragment_path) {
-  GLuint vertex_shader = compile_shader(vertex_path, GL_VERTEX_SHADER);
-  GLuint fragment_shader = compile_shader(fragment_path, GL_FRAGMENT_SHADER);
 
-  GLuint program = glCreateProgram();
-  glAttachShader(program, vertex_shader);
-  glAttachShader(program, fragment_shader);
-  glLinkProgram(program);
+GLProgram::GLProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+:vertexShaderID(createShader(vertexShaderPath, GL_VERTEX_SHADER)),
+ fragmentShaderID(createShader(fragmentShaderPath, GL_FRAGMENT_SHADER)),
+ programID(glCreateProgram()) {
 
-  glDeleteShader(vertex_shader);
-  glDeleteShader(fragment_shader);
+    glAttachShader(programID, vertexShaderID);
+    glAttachShader(programID, fragmentShaderID);
 
-  glDetachShader(program, vertex_shader);
-  glDetachShader(program, fragment_shader);
+    glLinkProgram(programID);
 
-  return program;
+    glDeleteShader(vertexShaderID);
+    glDeleteShader(fragmentShaderID);
+
+    glDetachShader(programID, vertexShaderID);
+    glDetachShader(programID, fragmentShaderID);
+}
+
+
+GLProgram::~GLProgram() {
+    glDeleteProgram(programID);
+}
+
+
+GLuint GLProgram::createShader(const std::string& filepath, GLenum shaderType) {
+    const std::string shaderCode = load_file(filepath);
+    const char* shaderCString = shaderCode.data();
+
+    GLuint shaderID = glCreateShader(shaderType);
+    glShaderSource(shaderID, 1, &shaderCString, nullptr);
+    glCompileShader(shaderID);
+
+    return shaderID;
 }
