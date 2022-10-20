@@ -18,8 +18,8 @@ void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id, GLenu
 
 
 int main() {
-    const size_t initial_width = 1280;
-    const size_t initial_height = 720;
+    const size_t initial_width = 1600;//1280
+    const size_t initial_height = 900;//720
 
     // Initialize GLFW
     if(!glfwInit()) {

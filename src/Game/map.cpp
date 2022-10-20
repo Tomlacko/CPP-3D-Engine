@@ -249,7 +249,6 @@ void Map::tick(float deltaTime, float totalTime, Player& player) {
         }
         if(obj.tag=="orb_piece") {
             obj.changeRotBy(deltaTime, 0);
-            DEBUG_LOG_LN(std::sin(totalTime*1000)/100);
             obj.changePosBy(0, std::sin(totalTime*5)/50, 0);
         }
     }
