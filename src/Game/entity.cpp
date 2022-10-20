@@ -80,6 +80,8 @@ void Entity::tick(float deltaTime) {
 }
 
 bool Entity::checkCollision(Object* obj) {
+    if(!obj->collides) return false;
+
     Hitbox a = getHitbox();
     Hitbox b = obj->getHitbox();
 

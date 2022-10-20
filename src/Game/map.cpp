@@ -228,19 +228,17 @@ Map::~Map() {
 
 
 
-void Map::tick(float deltaTime, Player& player) {
+void Map::tick(float deltaTime, float totalTime, Player& player) {
     for(auto& [name, ent] : entities) {
         ent.tick(deltaTime);
         if(!ent.collides) continue;
         for(auto& [name, obj] : objects) {
-            if(!obj.collides) continue;
             ent.checkCollision(&obj);
         }
     }
     player.tick(deltaTime);
     if(player.collides) {
         for(auto& [name, obj] : objects) {
-            if(!obj.collides) continue;
             player.checkCollision(&obj);
         }
     }
@@ -249,7 +247,14 @@ void Map::tick(float deltaTime, Player& player) {
         if(obj.tag=="sprite") {
             obj.setRot(player.getRot()+glm::vec2(0, PI/2));
         }
+        if(obj.tag=="orb_piece") {
+            obj.changeRotBy(deltaTime, 0);
+            DEBUG_LOG_LN(std::sin(totalTime*1000)/100);
+            obj.changePosBy(0, std::sin(totalTime*5)/50, 0);
+        }
     }
+
+
 }
 
 void Map::render(float time) const {

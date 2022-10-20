@@ -2,6 +2,10 @@
 #include "../application.hpp"
 #include <GLFW/glfw3.h>
 
+#include "hitbox.hpp"
+
+int pieces = 0;
+
 
 
 static constexpr char const* INITIAL_MAP = "map01.map";
@@ -22,6 +26,8 @@ Game::Game(Application* application, int w, int h)
     ui.addTextElement("start", "Click inside window to start the game!", {-1, 1}, {-0.9, 0.9}, {2, 2});
     ui.addTextElement("paused", "Game paused", {-1, 1}, {-0.9, 0.9}, {3, 3});
     ui.getTextElement("paused")->hide();
+
+    ui.addTextElement("status", "Collected orb pieces: 0", {-1, -1}, {-1, -1}, {3, 3});
 }
 
 
@@ -42,8 +48,21 @@ void Game::tick(float deltaTime) {
         }
 
         //tick entities
-        map.tick(deltaTime, player);
+        map.tick(deltaTime, currentTime, player);
         //player.tick(deltaTime);
+
+        Hitbox a = player.getHitbox();
+
+        for(auto& [name, obj] : map.objects) {
+            if(obj.tag=="orb_piece") {
+                Hitbox b = obj.getHitbox();
+                if(a.intersecting(b)) {
+                    obj.changePosBy(0, 1000, 0);
+                    pieces++;
+                    DEBUG_LOG_LN("collected piece");
+                }
+            }
+        }
 
         setCameraToPlayer();
 

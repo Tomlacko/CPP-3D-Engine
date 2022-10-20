@@ -48,7 +48,7 @@ public:
     glm::vec3 getPlayerSpawnPoint() const {return spawnPoint.getPos();}
     glm::vec2 getPlayerSpawnRot() const {return spawnPoint.getRot();}
 
-    void tick(float deltaTime, Player& player);
+    void tick(float deltaTime, float totalTime, Player& player);
     void render(float time) const;
 
 };

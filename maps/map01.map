@@ -263,6 +263,7 @@ object table table_round  -1 0 -8.25  0 0  1 1 1  true table_round table_round
 # object banner banner_2  5.75 1.5 -10  90 0  1 1 1  false banner banner
 
 object candle candle_2  -0.75 1.1 -8.25  0 0  1 1 1  false candle candle
+object sprite light_halo_5  -0.75 1.5 -8.25  0 0  0.2 0.2 0.2  false PLANE halo
 
 object wall_candle wall_candle_2  3 2 -0.15  0 0  1 1 1  false wall_candle wall_candle
 object sprite light_halo_2  3 2.3 -0.25  0 0  0.2 0.2 0.2  false PLANE halo
@@ -274,8 +275,13 @@ object sprite light_halo_3  -1.75 2.3 -5  0 0  0.2 0.2 0.2  false PLANE halo
 
 
 object orb_pedestal orb_pedestal  6.25 0 -6  0 0  1 1 1  true orb_pedestal orb_pedestal
-object orb_complete orb_complete  6.25 1 -6  0 0  1 1 1  true orb_complete orb_complete
-# object orb_piece orb_piece_1  6.25 1 -5  0 0  1 1 1  false orb_piece orb_piece
+object orb_complete orb_complete  6.25 1 -6  0 0  1 1 1  false orb_complete orb_complete
+object orb_incomplete orb_incomplete  6.25 1 -6  0 0  1 1 1  false orb_piece orb_piece
+
+object orb_piece orb_piece_1  2.25 1 -10  0 0  1 1 1  false orb_piece orb_piece
+object orb_piece orb_piece_2  -3 1.5 -7  25 0  1 1 1  false orb_piece orb_piece
+object orb_piece orb_piece_3  -9.5 1 -1.25  75 0  1 1 1  false orb_piece orb_piece
+
 
 
 
@@ -287,6 +293,8 @@ object orb_complete orb_complete  6.25 1 -6  0 0  1 1 1  true orb_complete orb_c
 light 2.5 2  -5 2 1.25  1 0.7 0.45
 light 2.5 2  3 2 -1.5  1 0.7 0.45
 light 2 2  0 2 -5  1 0.7 0.45
+
+light 1 2  -0.75 1.5 -8.25  1 0.7 0.45
 
 
 # chandelier
