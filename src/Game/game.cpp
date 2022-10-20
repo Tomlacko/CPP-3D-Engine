@@ -2,35 +2,53 @@
 #include "../application.hpp"
 #include <GLFW/glfw3.h>
 
+
+
 static constexpr char const* INITIAL_MAP = "map01.map";
 
 
 Game::Game(Application* application, int w, int h)
-:app(application), width(w), height(h), map(INITIAL_MAP), player(map.getPlayerSpawnPoint(), map.getPlayerSpawnRot()), camera(w, h), prerenderingFramebuffer(w, h) {
+: app(application), screenWidth(w), screenHeight(h), map(INITIAL_MAP),
+  player(map.getPlayerSpawnPoint(), map.getPlayerSpawnRot()),
+  camera(w, h), prerenderingFramebuffer(w, h), ui(w, h) {
     glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+    ui.addImageElement("blackscreen", {0, 0}, {32, 0, 48, 16}, {0, 0}, {100, 100});
+    ui.addImageElement("crosshair", {0, 0}, {0, 0, 16, 16}, {0, 0});
+
+    ui.addTextElement("start", "Click inside window to start the game!", {-1, 1}, {-0.9, 0.9}, {2, 2});
+    ui.addTextElement("paused", "Game paused", {-1, 1}, {-0.9, 0.9}, {3, 3});
+    ui.getTextElement("paused")->hide();
 }
 
 
 void Game::tick(float deltaTime) {
-    currentTime += deltaTime;
+    if(!paused || tickCount==0) {
+        currentTime += deltaTime;
 
-    //control player movement
-    if(!guiMode) {
-        glm::vec3 moveDir;
-        if(keyHeld(GLFW_KEY_W)) moveDir.z+=1;
-        if(keyHeld(GLFW_KEY_S)) moveDir.z-=1;
-        if(keyHeld(GLFW_KEY_A)) moveDir.x-=1;
-        if(keyHeld(GLFW_KEY_D)) moveDir.x+=1;
-        if(keyHeld(GLFW_KEY_SPACE)) moveDir.y+=1;
-        if(keyHeld(GLFW_KEY_LEFT_CONTROL)) moveDir.y-=1;
-        player.move(moveDir);
+        //control player movement
+        if(!guiMode) {
+            glm::vec3 moveDir;
+            if(keyHeld(GLFW_KEY_W)) moveDir.z+=1;
+            if(keyHeld(GLFW_KEY_S)) moveDir.z-=1;
+            if(keyHeld(GLFW_KEY_A)) moveDir.x-=1;
+            if(keyHeld(GLFW_KEY_D)) moveDir.x+=1;
+            if(keyHeld(GLFW_KEY_SPACE)) moveDir.y+=1;
+            if(keyHeld(GLFW_KEY_LEFT_CONTROL)) moveDir.y-=1;
+            player.move(moveDir);
+        }
+
+        //tick entities
+        map.tick(deltaTime, player);
+        //player.tick(deltaTime);
+
+        setCameraToPlayer();
+
+        ++tickCount;
     }
-
-    //tick entities
-    map.tick(deltaTime);
-    player.tick(deltaTime);
-
-    setCameraToPlayer();
 }
 
 void Game::render() const {
@@ -49,14 +67,10 @@ void Game::render() const {
     //depth test not needed for direct drawing
     glDisable(GL_DEPTH_TEST);
 
-    //font_texture.use(2);
-
     Framebuffer::drawScreenCoveringTriangle();
 
-    /*
-    progUI.use();
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    */
+
+    ui.render(currentTime);
 }
 
 void Game::setGuiMode(bool enable) {
@@ -72,7 +86,7 @@ void Game::mouseMove(float dx, float dy) {
 void Game::mouseClick(float x, float y, int button, bool down) {
     if(button==GLFW_MOUSE_BUTTON_LEFT) {
         if(down) {
-            setGuiMode(false);
+            if(paused && tickCount<=1) setPaused(false);
         }
     }
 }
@@ -91,7 +105,7 @@ void Game::handleKey(int key, bool down) {
 
         switch(key) {
             case 256: //ESC
-                stopGame = true;
+                setPaused(!paused);
                 break;
             case 340:
                 player.setRunning(true);
@@ -120,6 +134,31 @@ bool Game::mouseHeld(int buttonName) const {
 }
 
 void Game::windowResized(int width, int height) {
+    if(width<1 || height<1) return;
+    screenWidth = width;
+    screenHeight = height;
+
     camera.setAspect(width, height);
     prerenderingFramebuffer.resize(width, height);
+    ui.resize(width, height);
+}
+
+void Game::setPaused(bool state) {
+    if(state) {
+        setGuiMode(true);
+        paused = true;
+        ui.getImageElement("blackscreen")->show();
+        ui.getTextElement("paused")->show();
+    }
+    else {
+        setGuiMode(false);
+        paused = false;
+        ui.getImageElement("blackscreen")->hide();
+        ui.getTextElement("start")->hide();
+        ui.getTextElement("paused")->hide();
+    }
+}
+
+void Game::quitGame() {
+    stopGame = true;
 }

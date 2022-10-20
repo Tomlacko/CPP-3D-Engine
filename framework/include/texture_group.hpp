@@ -23,7 +23,6 @@ public:
     float animFrequency = 0; //seconds
 
 
-
     explicit TextureGroup(float animFreq = 0): animFrequency(animFreq) {
     }
     std::vector<Texture>& type(unsigned int typeID) {return texFramesVecs[typeID];}

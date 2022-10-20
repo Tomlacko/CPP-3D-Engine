@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 
 
@@ -49,17 +50,20 @@ public:
 
     bool rightHanded = true;
 
+    glm::vec3 minCorner;
+    glm::vec3 maxCorner;
 
-    Mesh(std::vector<float> vertices, std::vector<uint32_t> indices, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2)
-    :Mesh(std::move(vertices), std::vector<float>(), std::vector<float>(), std::move(indices), mode, position_location, normal_location, tex_coord_location) {
+
+    Mesh(std::vector<float> vertices, std::vector<uint32_t> indices, bool rightHanded, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2)
+    :Mesh(std::move(vertices), std::vector<float>(), std::vector<float>(), std::move(indices), rightHanded, mode, position_location, normal_location, tex_coord_location) {
     }
 
-    Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<uint32_t> indices, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2)
-    :Mesh(std::move(vertices), std::move(normals), std::vector<float>(), std::move(indices), mode, position_location, normal_location, tex_coord_location) {
+    Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<uint32_t> indices, bool rightHanded, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2)
+    :Mesh(std::move(vertices), std::move(normals), std::vector<float>(), std::move(indices), rightHanded, mode, position_location, normal_location, tex_coord_location) {
     }
 
     //MAIN CONSTRUCTOR
-    Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<float> tex_coords, std::vector<uint32_t> indices, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
+    Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<float> tex_coords, std::vector<uint32_t> indices, bool rightHanded, GLenum mode = GL_TRIANGLES, GLint position_location = 0, GLint normal_location = 1, GLint tex_coord_location = 2);
 
     Mesh(const Mesh& other);
 
@@ -78,7 +82,6 @@ public:
     [[nodiscard]] GLuint get_normals_buffer() const {return this->normals_buffer;}
     [[nodiscard]] GLuint get_tex_coords_buffer() const {return this->tex_coords_buffer;}
     [[nodiscard]] GLuint get_indices_buffer() const {return this->indices_buffer;}
-
 
     void draw(int handednessLocation = 1) const;
 

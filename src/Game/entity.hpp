@@ -30,13 +30,10 @@ protected:
     void init();
 
 public:
-    Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sz, Meshes* geom, TextureGroup* texGrp): Object(pos, rot, sz, geom, texGrp) {
+    Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc = {1,1,1}, Meshes* geom = nullptr, TextureGroup* texGrp = nullptr): Object(pos, rot, sc, geom, texGrp) {
         init();
     }
-    Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sz): Object(pos, rot, sz) {
-        init();
-    }
-    Entity(const glm::vec3& pos, const glm::vec2& rot): Object(pos, rot) {
+    Entity(const glm::vec3& pos, const glm::vec2& rot, const glm::vec3& sc, const glm::vec3& sz, TextureGroup* texGrp = nullptr): Object(pos, rot, sc, sz, texGrp) {
         init();
     }
 
@@ -66,4 +63,6 @@ public:
     virtual void midTick(float deltaTime);
     virtual void postTick(float deltaTime);
     virtual void tick(float deltaTime);
+
+    virtual bool checkCollision(Object* obj);
 };

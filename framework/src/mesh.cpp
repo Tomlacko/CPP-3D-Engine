@@ -9,11 +9,12 @@
 #include "sphere.inl"
 #include "teapot.inl"
 
+#include <limits>
 
 
 //MAIN CONSTRUCTOR
-Mesh::Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<float> tex_coords, std::vector<uint32_t> indices, GLenum mode, GLint position_location, GLint normal_location, GLint tex_coord_location)
-:vertices_count(vertices.size()/3), mode(mode) {
+Mesh::Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<float> tex_coords, std::vector<uint32_t> indices, bool rightHanded, GLenum mode, GLint position_location, GLint normal_location, GLint tex_coord_location)
+:vertices_count(vertices.size()/3), mode(mode), rightHanded(rightHanded) {
 
     // Create buffer for vertices
     glCreateBuffers(1, &vertices_buffer);
@@ -39,11 +40,53 @@ Mesh::Mesh(std::vector<float> vertices, std::vector<float> normals, std::vector<
         indices_count = indices.size();
     }
 
+    //calculate bounding region
+    float ax = std::numeric_limits<float>::infinity();
+    float ay = ax; float az = ax;
+    float bx = -ax; float by = bx; float bz = bx;
+
+    int verts = vertices.size()/3;
+    for(int i = 0; i<verts; i++) {
+        float x = vertices[i*3];
+        float y = vertices[i*3 + 1];
+        float z = vertices[i*3 + 2];
+
+        if(x < ax) ax = x;
+        if(y < ay) ay = y;
+        if(z < az) az = z;
+
+        if(x > bx) bx = x;
+        if(y > by) by = y;
+        if(z > bz) bz = z;
+    }
+
+    if(ax==bx) {
+        ax-=0.05;
+        bx+=0.05;
+    }
+    if(ay==by) {
+        ay-=0.05;
+        by+=0.05;
+    }
+    if(az==bz) {
+        az-=0.05;
+        bz+=0.05;
+    }
+
+    if(rightHanded) {
+        minCorner = {ax, ay, -bz};
+        maxCorner = {bx, by, -az};
+    }
+    else {
+        minCorner = {ax, ay, az};
+        maxCorner = {bx, by, bz};
+    }
+
     recreate_vao(position_location, normal_location, tex_coord_location);
 }
 
 Mesh::Mesh(const Mesh& other)
-:vertices_count(other.vertices_count), indices_count(other.indices_count), mode(other.mode), rightHanded(other.rightHanded) {
+:vertices_count(other.vertices_count), indices_count(other.indices_count), mode(other.mode), rightHanded(other.rightHanded), minCorner(other.minCorner), maxCorner(other.maxCorner) {
     // Copy vertices
     if(other.vertices_buffer != 0) {
         glCreateBuffers(1, &vertices_buffer);
@@ -187,9 +230,8 @@ std::unique_ptr<Meshes> Mesh::from_file(const std::string& file_name, bool right
             }
         }
 
-        meshes.push_back(std::make_unique<Mesh>(vertices, normals, tex_coords, std::vector<uint32_t>()));
+        meshes.push_back(std::make_unique<Mesh>(vertices, normals, tex_coords, std::vector<uint32_t>(), rightHanded));
         meshes[meshes.size()-1]->recreate_vao(position_location, normal_location, tex_coord_location);
-        meshes[meshes.size()-1]->rightHanded = rightHanded;
     }
 
     return meshes_ptr;
@@ -216,9 +258,8 @@ std::unique_ptr<Meshes> Mesh::from_interleaved(std::vector<float> interleaved_ve
     std::unique_ptr<Meshes> meshes_ptr = std::make_unique<Meshes>(); //vector
     std::vector<std::unique_ptr<Mesh>>& meshes = *meshes_ptr;
 
-    meshes.emplace_back(std::make_unique<Mesh>(std::move(vertices), std::move(normals), std::move(tex_coords), std::move(indices), mode));
+    meshes.emplace_back(std::make_unique<Mesh>(std::move(vertices), std::move(normals), std::move(tex_coords), std::move(indices), rightHanded, mode));
     meshes[0]->recreate_vao(position_location, normal_location, tex_coord_location);
-    meshes[0]->rightHanded = rightHanded;
     return meshes_ptr;
 }
 

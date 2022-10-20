@@ -15,7 +15,7 @@ protected:
     float eyeHeight = 1.8;
     float speed = 3;
     float runSpeed = 5;
-    float jumpStrength = 4;
+    float jumpStrength = 5;
     float movementSlowdown = 10;
     glm::vec3 movementControls;
 
@@ -27,7 +27,7 @@ protected:
 
 public:
 
-    Player(const glm::vec3& pos, const glm::vec2& rot): Entity(pos, rot, {0.5, 1.9, 0.5}) {
+    Player(const glm::vec3& pos, const glm::vec2& rot): Entity(pos, rot, {1,1,1}, {0.8, 1.9, 0.8}) {
         init();
     }
 

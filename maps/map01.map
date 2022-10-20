@@ -1,36 +1,333 @@
-define string mapname debug
+define string mapname map01
 
-spawnpoint 0 0 -1.5  0 0
+spawnpoint -4.25 0 2.25  180 0
 
 # -----------------
 
 
-textures mansionbase 0 true 1 1
 
-mesh mansion_wall true
+textures mansion1 0 true 1 0 0 1
+mesh mansion1_wall true
+mesh mansion1_doorway true
+mesh mansion_doorframe true
+mesh mansion1_window true
+mesh mansion1_welder true
 
+textures mansion1_stove 0 true 1 1 0 1
+mesh mansion1_stove true
 
-object mansion_wall_1  0 0 0  0 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_2  4 0 0  0 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_3  -4 0 0  0 0  1 1 1  mansion_wall mansionbase
+textures mansion1_window_glass 0 true 1 0 0 1
 
-object mansion_wall_4  -6 0 -2  -90 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_5  -6 0 -6  -90 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_6  -6 0 -10  -90 0  1 1 1  mansion_wall mansionbase
+textures mansion1_ceilingwall 0 true 1 1 0 1
+mesh mansion1_ceilingwall true
+mesh mansion1_ceilingwall_convex true
+mesh mansion1_ceilingwall_concave true
 
-object mansion_wall_7  6 0 -2  90 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_8  6 0 -6  90 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_9  6 0 -10  90 0  1 1 1  mansion_wall mansionbase
-
-object mansion_wall_10  0 0 -12  180 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_11  4 0 -12  180 0  1 1 1  mansion_wall mansionbase
-object mansion_wall_12  -4 0 -12  180 0  1 1 1  mansion_wall mansionbase
-
-
-object test  0 2 -6  0 0  1 1 1 CUBE
+textures mansion1_ceiling 0 true 1 1 1 1
 
 
-# light 0  -50 50 -100  1 1 1
-# light 0  0 2 -6  1 1 1
 
-light 3  0 2 -2  0 0.6 1
+
+textures mansion2 0 true 1 1 0 1
+mesh mansion2_wall true
+mesh mansion2_doorway true
+
+
+
+
+textures castle_floor 0 true 1 1 1 1
+textures wood_light 0 true 1 1 0 1
+textures wood_dark 0 true 1 1 1 1
+
+
+
+textures dungeonbase 0 true 1 1 1 1
+mesh wood_welder true
+
+textures stone_welder_majestic 0 true 1 1 0 1
+mesh stone_welder_majestic true
+
+
+
+
+
+
+
+
+textures castle_door 0 true 1 1 0 1
+mesh castle_door true
+
+textures mansion_door 0 true 1 1 0 1
+mesh mansion_door true
+
+
+
+textures carpet 0 true 1 0 0 1
+mesh carpet true
+
+textures workdesk 0 true 1 1 0 1
+mesh workdesk true
+mesh workdesk_door true
+
+textures table_round 0 true 1 1 0 1
+mesh table_round true
+
+textures chair 0 true 1 1 0 1
+mesh chair true
+
+textures sofa 0 true 1 1 0 1
+mesh sofa true
+
+textures shelf 0 true 1 1 0 1
+mesh shelf true
+
+textures cabinet 0 true 1 1 0 1
+mesh cabinet true
+
+textures bed_big 0 true 1 1 0 1
+mesh bed_big true
+
+textures painting 0 true 1 1 0 1
+mesh painting true
+
+textures banner 0 true 1 1 0 1
+mesh banner true
+
+
+
+textures candle 0 true 1 1 0 1
+mesh candle true
+
+textures wall_candle 0 true 1 1 0 1
+mesh wall_candle true
+
+textures chandelier 0 true 1 1 0 1
+mesh chandelier true
+
+textures bonfire 0 true 1 1 0 1
+mesh bonfire true
+
+
+
+textures orb_pedestal 0 true 1 1 0 1
+mesh orb_pedestal true
+textures orb_complete 0 true 1 0 0 1
+mesh orb_complete true
+textures orb_piece 0 true 1 0 0 1
+mesh orb_piece true
+
+
+textures halo 0 true 1
+
+
+
+
+
+
+# --- ROOM 1 ---
+
+# walls, ceilings and floors
+
+object floor wood_floor_1  -4.25 0 2  0 0  4 1 4  true PLANE wood_light
+object floor wood_floor_2  -4.25 0 -2  0 0  4 1 4  true PLANE wood_light
+object floor wood_floor_3  -4.25 0 -6  0 0  4 1 4  true PLANE wood_light
+object floor wood_floor_4  -8.25 0 -2  0 0  4 1 4  true PLANE wood_light
+object floor wood_floor_5  -8.25 0 -6  0 0  4 1 4  true PLANE wood_light
+
+object wall mansion1_wall_1  -2.25 0 2  90 0  1 1 1  true mansion1_wall mansion1
+object wall mansion1_wall_2  -6.25 0 2  -90 0  1 1 1  true mansion1_wall mansion1
+object wall mansion1_wall_3  -4.25 0 4.5  0 0  1 1 1  false mansion1_wall mansion1
+object wall mansion1_wall_4  -2.25 0 -6  90 0  1 1 1  true mansion1_wall mansion1
+object wall mansion1_wall_5  -4.25 0 -8  180 0  1 1 1  true mansion1_wall mansion1
+object wall mansion1_wall_6  -8.25 0 -8  180 0  1 1 1  true mansion1_wall mansion1
+
+object ceilingwall mansion1_ceilingwall_1 -2.25 4 0  90 0  1 1 1  false mansion1_ceilingwall mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_2 -2.25 4 -4  90 0  1 1 1  false mansion1_ceilingwall mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_3 -10.25 4 -4  -90 0  1 1 1  false mansion1_ceilingwall mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_4 -6.25 4 -8  180 0  1 1 1  false mansion1_ceilingwall mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_concave_1 -2.25 4 -8  180 0  1 1 1  false mansion1_ceilingwall_concave mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_concave_2 -10.25 4 -8  -90 0  1 1 1  false mansion1_ceilingwall_concave mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_concave_3 -10.25 4 0  0 0  1 1 1  false mansion1_ceilingwall_concave mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_concave_4 -6.25 4 4  0 0  1 1 1  false mansion1_ceilingwall_concave mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_concave_5 -2.25 4 4  90 0  1 1 1  false mansion1_ceilingwall_concave mansion1_ceilingwall
+object ceilingwall mansion1_ceilingwall_convex_1 -6.25 4 0  0 0  1 1 1  false mansion1_ceilingwall_convex mansion1_ceilingwall
+
+object ceiling mansion1_ceiling_1  -7.25 6 -5  0 180  2 1 2  true PLANE mansion1_ceiling
+object ceiling mansion1_ceiling_2  -5.25 6 -5  0 180  2 1 2  true PLANE mansion1_ceiling
+object ceiling mansion1_ceiling_3  -7.25 6 -3  0 180  2 1 2  true PLANE mansion1_ceiling
+object ceiling mansion1_ceiling_4  -5.25 6 -3  0 180  2 1 2  true PLANE mansion1_ceiling
+
+
+object welder mansion1_welder_1  -6.25 0 0  0 0  1 1 1  true mansion1_welder mansion1
+
+object stove mansion1_stove_1  -8.25 0 0  0 0  1 1 1  true mansion1_stove mansion1_stove
+
+object window mansion1_window_1  -10.25 0 -2  -90 0  1 1 1  true mansion1_window mansion1
+object window mansion1_window_2  -10.25 0 -6  -90 0  1 1 1  true mansion1_window mansion1
+object windowglass mansion1_window_glass_1  -10.52 2.4 -2  -90 90  2.2 1 2.2  false PLANE mansion1_window_glass
+object windowglass mansion1_window_glass_2  -10.52 2.4 -6  -90 90  2.2 1 2.2  false PLANE mansion1_window_glass
+
+object doorway mansion1_doorway_1  -4.25 0 4  0 0  1 1 1  true mansion1_doorway mansion1
+object doorframe mansion_doorframe_1  -4.25 0 4  0 0  1 1 1  false mansion_doorframe mansion1
+
+object doorway mansion1_doorway_2  -2.25 0 -2  90 0  1 1 1  false mansion1_doorway mansion1
+object doorframe mansion_doorframe_2  -2.25 0 -2  90 0  1 1 1  false mansion_doorframe mansion1
+
+
+
+# details
+
+object door_static castle_door  -4.25 0.152 4  0 0  1 1 1  false castle_door castle_door
+
+
+object carpet carpet_1  -6.75 0 -4.5  -85.125 0  2.5 2.5 2.5  false carpet carpet
+
+object table workdesk  -3 0 -6.25  -90 0  1 1 1  true workdesk workdesk
+object table workdesk_door  -3 0 -6.25  -90 0  1 1 1  false workdesk_door workdesk
+
+object chair chair  -4 0 -6.5  -135 0  1 1 1  true chair chair
+
+object shelf shelf  -7 0 -7.25  180 0  1 1 1  true shelf shelf
+
+object sofa sofa  -9.5 0 -4  -90 0  1 1 1  true sofa sofa
+
+object painting painting_1  -4.25 1.75 -7.95  0 0  3 3 3  false painting painting
+
+object chandelier chandelier_1  -6.25 6 -4  0 0  1 1 1  true chandelier chandelier
+
+object bonfire bonfire  -8.25 0.11 -0.17  0 0  1 1 1  false bonfire bonfire
+object sprite light_halo_4  -8.25 0.5 -0.17  0 0  0.8 0.8 0.8  false PLANE halo
+
+object candle candle_1  -3.25 1 -5.5  180 0  1 1 1  false candle candle
+
+object wall_candle wall_candle_1  -6.1 2 1.25  -90 0  1 1 1  false wall_candle wall_candle
+object sprite light_halo_1  -6 2.3 1.25  0 0  0.2 0.2 0.2  false PLANE halo
+
+
+
+
+# --- ROOM 2 ---
+
+# walls, ceilings and floors
+
+object floor castle_floor_1  0 0 -2  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_2  0 0 -6  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_3  0 0 -10  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_4  4 0 -2  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_5  4 0 -6  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_6  4 0 -10  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_7  8 0 -6  0 0  4 1 4  true PLANE castle_floor
+
+object wall mansion2_wall_1  0 0 0  0 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_2  4 0 0  0 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_3  6 0 -2  90 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_4  6 0 -10  90 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_5  4 0 -12  180 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_6  0 0 -12  180 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_7  -2 0 -10  -90 0  1 1 1  true mansion2_wall mansion2
+object wall mansion2_wall_8  -2 0 -6  -90 0  1 1 1  true mansion2_wall mansion2
+
+object ceiling wood_ceiling_1  0 4 -2  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_2  0 4 -6  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_3  0 4 -10  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_4  4 4 -2   0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_5  4 4 -6   0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_6  4 4 -10  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_7  8 4 -6   0 180  4 1 4  true PLANE wood_dark
+
+object doorway mansion2_doorway_1  -2 0 -2  -90 0  1 1 1  false mansion2_doorway mansion2
+
+
+object welder wood_welder_1  5.88 0 -4  0 0  1 1 1  true wood_welder dungeonbase
+object welder wood_welder_2  5.88 0 -8  0 0  1 1 1  true wood_welder dungeonbase
+
+object welder stone_welder_majestic_1  7.75 0 -6  45 0  1 1 1  true stone_welder_majestic stone_welder_majestic
+object welder stone_welder_majestic_2  7.5 0 -5  75 0  1 1 1  true stone_welder_majestic stone_welder_majestic
+object welder stone_welder_majestic_3  7.5 0 -7  105 0  1 1 1  true stone_welder_majestic stone_welder_majestic
+object welder stone_welder_majestic_4  6.75 0 -4  45 0  1 1 1  true stone_welder_majestic stone_welder_majestic
+object welder stone_welder_majestic_5  6.75 0 -8  45 0  1 1 1  true stone_welder_majestic stone_welder_majestic
+
+
+
+# details
+
+object door mansion_door  -1.298 0 -2.7  165 0  1 1 1  true mansion_door mansion_door
+
+object cabinet cabinet  3.75 0 -11.25  180 0  1 1 1  true cabinet cabinet
+
+object bed bed_big_1  0 0 -10.5  180 0  1 1 1  true bed_big bed_big
+
+object table table_round  -1 0 -8.25  0 0  1 1 1  true table_round table_round
+
+# object banner banner_1  5.75 1.5 -2  90 0  1 1 1  false banner banner
+# object banner banner_2  5.75 1.5 -10  90 0  1 1 1  false banner banner
+
+object candle candle_2  -0.75 1.1 -8.25  0 0  1 1 1  false candle candle
+
+object wall_candle wall_candle_2  3 2 -0.15  0 0  1 1 1  false wall_candle wall_candle
+object sprite light_halo_2  3 2.3 -0.25  0 0  0.2 0.2 0.2  false PLANE halo
+object wall_candle wall_candle_3  -1.85 2 -5  -90 0  1 1 1  false wall_candle wall_candle
+object sprite light_halo_3  -1.75 2.3 -5  0 0  0.2 0.2 0.2  false PLANE halo
+
+
+
+
+
+object orb_pedestal orb_pedestal  6.25 0 -6  0 0  1 1 1  true orb_pedestal orb_pedestal
+object orb_complete orb_complete  6.25 1 -6  0 0  1 1 1  true orb_complete orb_complete
+# object orb_piece orb_piece_1  6.25 1 -5  0 0  1 1 1  false orb_piece orb_piece
+
+
+
+
+
+
+
+# candles
+light 2.5 2  -5 2 1.25  1 0.7 0.45
+light 2.5 2  3 2 -1.5  1 0.7 0.45
+light 2 2  0 2 -5  1 0.7 0.45
+
+
+# chandelier
+light 3 0.5  -6.25 6 -4  1 0.7 0.45
+
+
+# bonfire
+light 1.5 2  -8.25 1 -1  1 0.7 0.45
+
+# windows
+light 3 0.7  -8 2.5 -2  0.8 0.9 0.9
+light 3 0.7  -8 2.5 -6  0.8 0.9 0.9
+
+
+# orb
+light 2.5 2  6.25 2 -6  0 0.6 1
+
+
+
+
+
+
+
+# torch
+# light 2 2  0 2 -0.5  1 0.7 0.45
+# object sprite halo_1  0 2 -0.4  0 0  0.2 0.2 0.2  false PLANE halo
+
+
+
+# --sun light
+# light 0 1  -50 50 -100  1 1 1
+# light 0 1  -50 50 0  1 1 1
+# light 0 1  50 50 0  1 1 1
+# light 0 1  0 50 50  1 1 1
+# light 0 1  0 50 -50  1 1 1
+
+# --sun in room
+# light 0 1  0 2 -6  1 1 1
+
+# --blue light
+# light 3 1  -4 2 -4  0 0.6 1
+
+# --room torchlight
+# light 5 1  0 2 -6  1 0.7 0.45

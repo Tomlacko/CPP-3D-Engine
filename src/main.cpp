@@ -54,10 +54,17 @@ int main() {
 
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(opengl_debug_callback, nullptr);
-
+/*
+    // switch to full screen
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    int fullscreenWidth = mode->width;
+    int fullscreenHeight = mode->height;
+    glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, fullscreenWidth, fullscreenHeight, 0 );
+*/
     {
         // Initialize our Application
         Application application(window, initial_width, initial_height);
+        //Application application(window, fullscreenWidth, fullscreenHeight);
 
         // Set window's callbacks
         glfwSetWindowUserPointer(window, &application);

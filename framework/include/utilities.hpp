@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <iostream>
 #include <glm/glm.hpp>
 
 
@@ -17,6 +16,9 @@ float mod(float a, float b);
 int mod(int a, int b);
 unsigned int mod(unsigned int a, unsigned int b);
 
+double numsign(double n);
+float numsign(float n);
+int numsign(int n);
 
 glm::vec3 rotToDir(const glm::vec2& rot);
 glm::vec2 dirToRot(const glm::vec3& dir);

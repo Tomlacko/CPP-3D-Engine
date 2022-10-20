@@ -4,7 +4,6 @@
 #include "texture.hpp"
 
 
-
 void TextureGroup::init() {
     total = 0;
     for(const auto& texFramesVec : texFramesVecs) {
@@ -24,7 +23,6 @@ void TextureGroup::update(float deltaTime) {
 
 void TextureGroup::use(unsigned int textureInitialBindingPoint /* = 0*/, unsigned int maskUniformLocation /* = 0*/) const {
     unsigned int MASK = 0;
-
     if(total>0) { //if no textures initialized, none to bind
         for(unsigned int typeID=0; typeID<TEXTURE_TYPES_COUNT; typeID++) {
             if(texFramesVecs[typeID].size()>current) {

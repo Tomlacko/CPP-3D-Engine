@@ -3,8 +3,6 @@
 #include <cmath>
 #include <glm/gtx/vector_angle.hpp>
 
-#include <debug.hpp>
-
 
 
 
@@ -98,7 +96,7 @@ void Player::midTick(float deltaTime) {
 }
 
 void Player::postTick(float deltaTime) {
-    movementControls /= std::pow(2, deltaTime*(movementSlowdown/(onGround?1:4)));
+    movementControls /= std::pow(2, deltaTime*(movementSlowdown/(onGround||flying?1:4)));
 
     if(glm::length(movementControls) < 0.05) movementControls = {0,0,0};
 
@@ -109,12 +107,12 @@ void Player::tick(float deltaTime) {
     preTick(deltaTime);
     midTick(deltaTime);
     postTick(deltaTime);
-    DEBUG_LOG("Position: ");
+    /*DEBUG_LOG("Position: ");
     DEBUG_LOG_SEP(position.x);
     DEBUG_LOG_SEP(position.y);
     DEBUG_LOG_SEP(position.z);
     DEBUG_LOG("Motion: ");
     DEBUG_LOG_SEP(motion.x);
     DEBUG_LOG_SEP(motion.y);
-    DEBUG_LOG_LN(motion.z);
+    DEBUG_LOG_LN(motion.z);*/
 }

@@ -6,8 +6,10 @@
 
 #include "object.hpp"
 #include "entity.hpp"
+#include "player.hpp"
 #include "light.hpp"
 #include "area.hpp"
+#include "hitbox.hpp"
 
 
 
@@ -23,7 +25,7 @@ class Map {
 
 
 public:
-
+    //std::unordered_map<std::string, Hitbox> hitboxes;
     std::unordered_map<std::string, Object> objects;
     std::unordered_map<std::string, Entity> entities;
 
@@ -46,7 +48,7 @@ public:
     glm::vec3 getPlayerSpawnPoint() const {return spawnPoint.getPos();}
     glm::vec2 getPlayerSpawnRot() const {return spawnPoint.getRot();}
 
-    void tick(float deltaTime);
+    void tick(float deltaTime, Player& player);
     void render(float time) const;
 
 };

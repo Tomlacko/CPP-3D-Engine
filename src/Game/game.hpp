@@ -8,21 +8,26 @@
 
 #include <framebuffer.hpp>
 #include <program.hpp>
+#include "ui.hpp"
 
 
 class Application;
 
+
 class Game {
     Application* app;
 
-    int width;
-    int height;
+    int screenWidth;
+    int screenHeight;
 
     float mouseLookSensitivity = 0.5;
     bool guiMode = true;
     bool stopGame = false;
+    bool paused = true;
 
     float currentTime = 0;
+    int tickCount = 0;
+
 
     Map map;
     Player player;
@@ -30,11 +35,10 @@ class Game {
 
     GLProgram progDrawTextured {"shaders/draw_object_textured.vert", "shaders/draw_object_textured.frag"};
     GLProgram progPostprocess {"shaders/postprocess.vert", "shaders/postprocess.frag"};
-    GLProgram progUI {"shaders/ui.vert", "shaders/ui.frag"};
-
-    Texture font_texture {"textures/font.png", false};
 
     Framebuffer prerenderingFramebuffer;
+
+    UI ui;
 
 public:
 
@@ -50,8 +54,11 @@ public:
         camera.setRot(player.getRot());
     }
 
+    void quitGame();
     bool shouldEnd() const {return stopGame;}
     void setGuiMode(bool enable);
+    void setPaused(bool state);
+    bool isPaused() const {return paused;}
 
     void windowResized(int width, int height);
 

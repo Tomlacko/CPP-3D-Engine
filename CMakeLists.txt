@@ -90,7 +90,7 @@ add_executable(final
 	src/main.cpp
 	src/application.cpp
 		src/Game/camera.hpp src/Game/camera.cpp src/Game/game.hpp src/Game/game.cpp src/Game/player.hpp src/Game/player.cpp src/Game/object.hpp src/Game/object.cpp src/Game/entity.hpp src/Game/entity.cpp src/Game/map.hpp src/Game/map.cpp src/Game/area.hpp src/Game/area.cpp src/Game/light.hpp src/Game/light.cpp
-        framework/include/texture_group.hpp framework/include/debug.hpp src/Game/ui.hpp src/Game/ui.cpp)
+        framework/include/texture_group.hpp framework/include/debug.hpp src/Game/ui.hpp src/Game/ui.cpp src/Game/hitbox.hpp src/Game/hitbox.cpp)
 
 add_dependencies(final 
 	glfw 
@@ -133,12 +133,11 @@ set(TEXTURES ${CMAKE_CURRENT_SOURCE_DIR}/textures)
 set(TEXTURES_BINARY ${CMAKE_CURRENT_BINARY_DIR}/textures)
 configure_file(${TEXTURES}/default.png ${TEXTURES_BINARY}/default.png COPYONLY)
 configure_file(${TEXTURES}/font.png ${TEXTURES_BINARY}/font.png COPYONLY)
+configure_file(${TEXTURES}/gui.png ${TEXTURES_BINARY}/gui.png COPYONLY)
 
 set(OBJECTS ${CMAKE_CURRENT_SOURCE_DIR}/objects)
 set(OBJECTS_BINARY ${CMAKE_CURRENT_BINARY_DIR}/objects)
-configure_file(${OBJECTS}/test_scene.mtl ${OBJECTS_BINARY}/test_scene.mtl COPYONLY)
-configure_file(${OBJECTS}/test_scene.obj ${OBJECTS_BINARY}/test_scene.obj COPYONLY)
-configure_file(${OBJECTS}/mansion_wall.obj ${OBJECTS_BINARY}/mansion_wall.obj COPYONLY)
+#configure_file(${OBJECTS}/mansion_wall.obj ${OBJECTS_BINARY}/mansion_wall.obj COPYONLY)
 
 
 set(MAPS ${CMAKE_CURRENT_SOURCE_DIR}/maps)

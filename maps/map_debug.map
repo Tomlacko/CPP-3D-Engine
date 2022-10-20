@@ -1,0 +1,78 @@
+define string mapname debug
+
+spawnpoint 0 0 -1.5  0 0
+
+# -----------------
+
+
+textures mansionbase2 0 true 1 1 0 1
+textures castle_floor 0 true 1 1 1 1
+textures wood_light 0 true 1 1 0 1
+textures wood_dark 0 true 1 1 1 1
+
+textures halo 0 true 1
+
+
+mesh mansion_wall2 true
+
+
+object wall mansion_wall_1  0 0 0  0 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_2  4 0 0  0 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_3  -4 0 0  0 0  1 1 1  true mansion_wall2 mansionbase2
+
+object wall mansion_wall_4  -6 0 -2  -90 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_5  -6 0 -6  -90 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_6  -6 0 -10  -90 0  1 1 1  true mansion_wall2 mansionbase2
+
+object wall mansion_wall_7  6 0 -2  90 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_8  6 0 -6  90 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_9  6 0 -10  90 0  1 1 1  true mansion_wall2 mansionbase2
+
+object wall mansion_wall_10  0 0 -12  180 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_11  4 0 -12  180 0  1 1 1  true mansion_wall2 mansionbase2
+object wall mansion_wall_12  -4 0 -12  180 0  1 1 1  true mansion_wall2 mansionbase2
+
+
+object floor castle_floor_1  0 0 -2  0 0  4 1 4  true PLANE wood_dark
+object floor castle_floor_2  4 0 -2  0 0  4 1 4  true PLANE wood_dark
+object floor castle_floor_3  -4 0 -2  0 0  4 1 4  true PLANE wood_dark
+
+object floor castle_floor_4  0 0 -6  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_5  4 0 -6  0 0  4 1 4  true PLANE wood_dark
+object floor castle_floor_6  -4 0 -6  0 0  4 1 4  true PLANE castle_floor
+
+object floor castle_floor_7  0 0 -10  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_8  4 0 -10  0 0  4 1 4  true PLANE castle_floor
+object floor castle_floor_9  -4 0 -10  0 0  4 1 4  true PLANE castle_floor
+
+
+object ceiling wood_ceiling_1  0 4 -2  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_2  4 4 -2  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_3  -4 4 -2  0 180  4 1 4  true PLANE wood_dark
+
+object ceiling wood_ceiling_4  0 4 -6  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_5  4 4 -6  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_6  -4 4 -6  0 180  4 1 4  true PLANE wood_dark
+
+object ceiling wood_ceiling_7  0 4 -10  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_8  4 4 -10  0 180  4 1 4  true PLANE wood_dark
+object ceiling wood_ceiling_9  -4 4 -10  0 180  4 1 4  true PLANE wood_dark
+
+# torch
+light 2 2  0 2 -0.5  1 0.7 0.45
+object sprite halo_1  0 2 -0.4  0 0  0.2 0.2 0.2  false PLANE halo
+
+
+# object debug test  0 2 -6  0 0  1 1 1 CUBE
+
+# --sun light
+# light 0 1  -50 50 -100  1 1 1
+
+# --sun in room
+# light 0 1  0 2 -6  1 1 1
+
+# --blue light
+light 3 1  -4 2 -4  0 0.6 1
+
+# --room torchlight
+light 4 1  0 2 -6  1 0.7 0.45

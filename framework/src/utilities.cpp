@@ -5,10 +5,10 @@
 
 
 const std::string load_file(const std::string &file_name) {
-    std::ifstream infile{file_name};
+    std::ifstream infile {file_name};
 
     if(!infile) {
-        throw std::string("File ") + file_name + " does not exists";
+        throw std::runtime_error("File '"+ file_name + "' does not exist!");
     }
 
     return {std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>()};
@@ -34,6 +34,15 @@ unsigned int mod(unsigned int a, unsigned int b) {
     return a - b*static_cast<int>(std::floor((float)a/(float)b));
 }
 
+double numsign(double n) {
+    return n<0 ? -1 : 1;
+}
+float numsign(float n) {
+    return n<0 ? -1 : 1;
+}
+int numsign(int n) {
+    return n<0 ? -1 : 1;
+}
 
 
 glm::vec3 rotToDir(const glm::vec2& rot) {

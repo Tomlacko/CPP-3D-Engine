@@ -26,6 +26,7 @@ void Texture::load(bool delData /* = true*/) {
     if(loadedInGL) glDeleteTextures(1, &bufferID);
 
     glCreateTextures(GL_TEXTURE_2D, 1, &bufferID);
+
     glTextureStorage2D(bufferID,
                        interpolated ? std::log2(width) : 1, //mipmaps
                        GL_RGBA8,

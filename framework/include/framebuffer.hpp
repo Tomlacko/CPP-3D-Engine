@@ -13,7 +13,7 @@ class Framebuffer {
     int width;
     int height;
 
-    static GLuint current;
+    static GLuint current; //initialized in .cpp
 
 public:
 

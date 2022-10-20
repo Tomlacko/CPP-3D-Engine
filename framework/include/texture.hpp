@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+#include <debug.hpp>
 
 
 class Texture {
@@ -13,8 +14,8 @@ class Texture {
     std::unique_ptr<unsigned char[]> pixeldata;
     bool interpolated;
 
-    bool loadedInGL;
-    GLuint bufferID;
+    bool loadedInGL = false;
+    GLuint bufferID = 0;
 
 public:
 
@@ -24,7 +25,7 @@ public:
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
     Texture(Texture&&) = default;
-    Texture& operator=(Texture&&) = default;
+    Texture& operator=(Texture&&) = delete;
 
     ~Texture();
 
