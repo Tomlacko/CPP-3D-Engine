@@ -5,6 +5,8 @@ The initial boilerplate rendering code was provided by the teacher, but the rest
 
 The demo scene I ended up creating is made out of "Amnesia - The Dark Descent" game assets.
 
+A lot of this was rushed during the last day, therefore the code contains some stuff used for demonstration purposes only which shouldn't really be there. There's also some bugs I didn't have time to fix, but I'm still happy with the end result.
+
 ### Preview images:
 
 ![preview1.jpg](preview_images/preview1.jpg)
